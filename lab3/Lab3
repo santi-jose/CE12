@@ -1,5 +1,75 @@
-Welcome to Conversion.
-Input Number: -10389
-Output Number: 11111111111111111101011101101011
--- program is finished running --
+# Max Dunne 10/22/17
+# BaseFile.asm-- Starter File to begin coding assignment1
+# this file will not work correctly unless you have arguments to the program
+# be sure to add them before you try to run it.
+.text
+main:
+	move	 $s0,$a1
+	lw	 $s0,($s0)
+	la	 $a0, hello_msg # load the addr of hello_msg into $a0.
+	li	 $v0, 4 # 4 is the print_string syscall.
+	syscall 	# do the syscall.
+	
+	#This prints the input label
+	la	 $a0,input_msg #load the addr of input_msg
+	li	 $v0,4
+	syscall
+	
+	#This prints the value
+	la	$a0,($s0) #load value stored from text argument
+	li	$v0,4  #use print command
+	syscall	#do the syscall
 
+	#have to figure out how to split the bits into decimal in different places
+	
+	#This prints the output string
+	la	$a0,output_msg #load output message into $a0
+	li	$v0,4 #use print command
+	syscall	#do the syscall
+	
+	
+	
+	
+	addi	$t1,$zero,0
+	
+	
+	Loop:
+	lb	$t0,($s0) #load s0 into t0
+	beq	$t0,'-',negative #negative check
+	beq	$t0,$zero,negative_check #negative check
+	subi	$t0,$t0,48 #conversion
+	mult	$t1,$t1,10
+	addi	$t1,$t1,$t0
+	addi	$s0,$s0,1
+	j	Loop
+	
+	negative:
+	li	$s1,1 #negative flag
+	addi	$s0,$s0,1
+	j	Loop
+	
+	
+	mask:
+	
+	
+	
+	
+	negative_check:
+	beq	$s1,$zero,next #if neg flag is zero skip 2s comp
+	not	$s0,$s0
+	addi	$s0,$s0,1
+	
+	next:
+	
+	
+	
+	
+	# your code goes here above the exit syscall
+	li	 $v0, 10 # 10 is the exit syscall.
+	syscall 	# do the syscall.
+# Data for the program:
+.data
+input_msg: .asciiz 	"Input Number:" #label for input message
+output_msg: .asciiz	"\nOutput Number:" #label for output message
+hello_msg: .asciiz 	"Welcome to my Program \n"
+# end hello.asm
