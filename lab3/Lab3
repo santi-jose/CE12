@@ -1,4 +1,4 @@
-# Max Dunne 10/22/17
+# Jose Santiago 11/1/17
 # BaseFile.asm-- Starter File to begin coding assignment1
 # this file will not work correctly unless you have arguments to the program
 # be sure to add them before you try to run it.
@@ -20,46 +20,59 @@ main:
 	li	$v0,4  #use print command
 	syscall	#do the syscall
 
-	#have to figure out how to split the bits into decimal in different places
 	
 	#This prints the output string
 	la	$a0,output_msg #load output message into $a0
 	li	$v0,4 #use print command
 	syscall	#do the syscall
 	
+	addi	$s2,$zero,0
 	
-	
-	
-	addi	$t1,$zero,0
-	
-	
+	#main loop for conversion
 	Loop:
 	lb	$t0,($s0) #load s0 into t0
 	beq	$t0,'-',negative #negative check
+	nop
 	beq	$t0,$zero,negative_check #negative check
+	nop
 	subi	$t0,$t0,48 #conversion
-	mult	$t1,$t1,10
-	addi	$t1,$t1,$t0
-	addi	$s0,$s0,1
-	j	Loop
+	mul 	$s2,$s2,10	
+	add	$s2,$s2,$t0 #accounting for decimal places
+	addi	$s0,$s0,1 #incrementing to shift to next char
+	j 	Loop 	
+	nop
 	
 	negative:
 	li	$s1,1 #negative flag
-	addi	$s0,$s0,1
-	j	Loop
+	addi	$s0,$s0,1 #increment s0 for next char
+	j	Loop #go back to Loop
+	nop
 	
 	
+	li	$t0,2147483648 #initialize mask
 	mask:
+	and 	$s2,$s2,$t0 #run the mask and save into s2
+	bgtz	$s2,else #Print one or zero
+	nop
+	li	$a0,48
+	li	$v0,11 #print one
+	syscall
+	srl	$t2,$t2,1
+	nop
 	
-	
-	
+	else:
+	li	$a0,49
+	li	$v0,11 #print zero 	
+	j	mask
+	nop
+	#Link Somewhere
+	syscall
 	
 	negative_check:
-	beq	$s1,$zero,next #if neg flag is zero skip 2s comp
-	not	$s0,$s0
-	addi	$s0,$s0,1
-	
-	next:
+	beq	$s1,$zero,mask #if neg flag is zero skip 2s comp
+	nop
+	not	$s0,$s0 #invert bits
+	addi	$s0,$s0,1 #add one
 	
 	
 	
