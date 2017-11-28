@@ -1,1 +1,1 @@
-Your Lab 5 work *must* be done in this directory.
+Jose Santiago jlsantia@ucsc.edu Lab5 Section 01A
